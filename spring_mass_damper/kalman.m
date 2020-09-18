@@ -40,7 +40,7 @@ function [Xest, Pxy] = kalman(Xmes, X)
         % prior state covariance  
         Pp = Pm - K*Cs*Pm;              % 2x2 
 
-        % step 2: update
+        % step 3: update
         % steps assume no process noise
         Xest(i,:) = s' + K * (Xmes(:, i) - Cs * s');
 
