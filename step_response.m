@@ -24,6 +24,7 @@ hold on;
 for d=0:0.5:1
     sys = tf(1,[1 2*d*wn wn^2]);
     step(sys,100);
+    legend('d' + d)
     % set(get(gca, 'XLabel', 'String', '');
 end 
 saveas(gcf, './figs/damping_step_response.png')    
