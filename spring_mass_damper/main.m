@@ -1,28 +1,28 @@
 clc; clear all
 
-
 % input 
-F = 1
+F = 1   % applied force (N)
+
 % time... 
 time = 500;
 dt = 1;
-
 t = 1:dt:time;
 tdelay = 3;
 
 % display variables
 sim = true;
+sim_err = true;
 
 % estimated covariance 
 Pxy = [1e-4 0; 0 1e-6];
 
-% state: inital conditions x= 0, x_dot = 0
+% STATE inital conditions pose = 0, velocity = 0
 X(1)=0; X(2)=0;
 
 % measurement values
 Xmes(1)=0; Xmes(2)=0;
 
-% Initialize X estimation matrix
+% estimation structure
 Xest(1)=0; Xest(2)=0;
 
 % spring-mass damper system output
@@ -34,11 +34,7 @@ Xmes = sense(t, X(:,1), X(:,2));
 % kalman filter state estimate
 [Xest, Pxy] = kalman(Xmes, X);
 
-% Xest
-% plot(Xest)
-
-%  plot setup 
-%  COLORS:
+% ---------PLOT COLORS:----------
 % 'red'	'r'	[1 0 0]	'#FF0000'	
 % 'green'	'g'	[0 1 0]	'#00FF00'	
 % 'blue'	'b'	[0 0 1]	'#0000FF'	
@@ -48,12 +44,17 @@ Xmes = sense(t, X(:,1), X(:,2));
 % 'black'	'k'	[0 0 0]	'#000000'	
 % 'white'	'w'	[1 1 1]	'#FFFFFF'	
 % 'none'
+% -------------------------------
 
 if sim == true
     clf(gcf);
+    % create subplot for error measurements
 
-    % plot true state
-    % subplot(2,1,1);
+    % add subplot for error simulation 
+    if sim_err = true
+        subplot(2,1,1);
+    end
+
     px = plot(t,X(:,1));
     hold on
     pv = plot(t,X(:,2));
@@ -80,19 +81,20 @@ if sim == true
     legend('position (m)', 'velocity (m/s)', 'position measured (m/s)', 'vel measured (m/s)', 'kalman pose estimate (m)', 'kalman vel estimate (m)');
     title('Velocity drift');
 
-    % subplot(2,1,2);
-    % pErrx = plot(abs(Xest(:,1) - X(1,:))); 
-    % hold on
-    % A = Xest(:,1) - X(1,:)
+    if sim_err == true
+        subplot(2,1,2);
+        pErrx = plot(abs(Xest(:,1) - X(1,:))); 
+        hold on
+        A = Xest(:,1) - X(1,:)
 
-    % plot(A);
-    % pErrx.Color = 'black'
-    % pErrv.Color = 'red'
-    % ylabel('Amplitude')
-    % xlabel('time(s)'); 
-    % legend('abs position error (m)', 'abs vel error (m/s)');
-    % title('Error')
-    % axis([0 time -2 10]);
-    
+        plot(A);
+        pErrx.Color = 'black'
+        pErrv.Color = 'red'
+        ylabel('Amplitude')
+        xlabel('time(s)'); 
+        legend('abs position error (m)', 'abs vel error (m/s)');
+        title('Error')    
+    end
+
     saveas(gcf, './figs/demo.png');
 end

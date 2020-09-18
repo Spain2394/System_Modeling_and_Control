@@ -1,7 +1,7 @@
 function [Xest, Pxy] = kalman(Xmes, X)
-    % input: Xmes = position and velocity measurements
-        
-    % step 1: initialization 
+    % input: state measurements Xmes = [x, x_dot]
+    % output: estimated state Xest = [x,x_dot], and estimation covariance
+    
     % sensor noise variance
     R = [1e-4 0; 0 1e-5];
 
@@ -18,8 +18,7 @@ function [Xest, Pxy] = kalman(Xmes, X)
     % process variance
     Q = [0 0; 0 0];
 
-    % filter will be the size of the measurement
-    % variable number and measurement number (mesn)
+    % varn = num states
     [varn, mesn] = size(Xmes);
 
     % state transition matrix
@@ -28,30 +27,30 @@ function [Xest, Pxy] = kalman(Xmes, X)
     % estimate
     s = [0, 0]
 
-    % % construct the kalman filter
-    % % all of the position data
+    % @TODO select process noise
+    % construct the kalman filter
     for i=2:mesn
     
-        % step 1: combined error
-        S = Cs * Pm * Cs' + R;        % 2x2     
+        % error term
+        S = Cs * Pm * Cs' + R;          % 2x2     
 
-        % % step 1: prediction
-        K = Pm * Cs' * inv(S);         % 2x2     
+        % step 2: prediction
+        K = Pm * Cs' * inv(S);          % 2x2     
 
-        % % prior state covariance  
-        Pp = Pm - K*Cs*Pm;           % 2x2 
+        % prior state covariance  
+        Pp = Pm - K*Cs*Pm;              % 2x2 
 
-        % % step 2: update
-        % % steps assume no process noise
+        % step 2: update
+        % steps assume no process noise
         Xest(i,:) = s' + K * (Xmes(:, i) - Cs * s');
+
+        % s = A*x(t) + Bu(t): or using real values
         s = X(i,:)
-        % Xest = newest estiamte 
-        % s = A*x(t) + Bu(t): previous estimat 
-        % % posterior state covriance
+
         % very little change
         Pm = A * Pp * A' + Q
 
-        % save your covariance matrix
+        % store covariance matrix
         Pxy = [Pxy; Pm]
 
     end   
