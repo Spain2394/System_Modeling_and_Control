@@ -2,6 +2,8 @@ function [Xest, Pxy] = kalman(Xmes, X)
     % input: state measurements Xmes = [x, x_dot]
     % output: estimated state Xest = [x,x_dot], and estimation covariance
     
+    % step 1: initialization
+
     % sensor noise variance
     R = [1e-4 0; 0 1e-5];
 
