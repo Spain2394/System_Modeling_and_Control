@@ -11,7 +11,7 @@ tdelay = 3;
 
 % display variables
 sim = true;
-sim_err = true;
+sim_err = false;
 
 % estimated covariance 
 Pxy = [1e-4 0; 0 1e-6];
@@ -51,7 +51,7 @@ if sim == true
     % create subplot for error measurements
 
     % add subplot for error simulation 
-    if sim_err = true
+    if sim_err == true
         subplot(2,1,1);
     end
 
@@ -79,7 +79,7 @@ if sim == true
     ylabel('Amplitude');
     xlabel('time(s)'); 
     legend('position (m)', 'velocity (m/s)', 'position measured (m/s)', 'vel measured (m/s)', 'kalman pose estimate (m)', 'kalman vel estimate (m)');
-    title('Velocity drift');
+    title(' Q = 0.01');
 
     if sim_err == true
         subplot(2,1,2);
@@ -96,5 +96,5 @@ if sim == true
         title('Error')    
     end
 
-    saveas(gcf, './figs/demo.png');
+    saveas(gcf, './figs/demo2.png');
 end
