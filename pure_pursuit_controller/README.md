@@ -81,4 +81,4 @@ Lost tracking...
 **Take away:**
 At high speeds, you get overshoot or instability using control law.
 ```vmax = 10```, using ```vmax = 5``` works much better with a look ahead distance of 3.
-
+<img src = "./figs/final_Ld=3.png">
