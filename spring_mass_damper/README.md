@@ -3,7 +3,7 @@
 
 #### question an alien might ask
 Is the open loop system stable. Yes asymptotically stable since the roots are strictly on the left side of the plot.
-<img src="./figs/root-locus.png>
+<img src="./figs/root-locus.png">
 
 
 ### Step response ```F = 1``` (little push)
